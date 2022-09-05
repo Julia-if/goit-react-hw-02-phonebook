@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
+import Contacts from './Contacts/Contacts';
+import Form from './Form/Form';
 
 class App extends Component {
   static defaultProps = {
@@ -30,47 +31,18 @@ class App extends Component {
     contacts: this.props.contacts,
     name: '',
   };
-  onInputChange = e => {
-    this.setState({ name: e.currentTarget.value });
+
+  formSubmitHandler = data => {
+    console.log(data);
   };
-  onSubmit = e => {
-    e.preventDefault();
-    this.setState(p => {
-      p.contacts.push({ id: nanoid(), name: this.state.name, number: '' });
-    });
-    console.log(this.state);
-    this.reset();
-  };
-  reset = () => {
-    this.setState({ contacts: this.props.contacts, name: '' });
-  };
-  addName = () => {
-    this.setState(p => p.contacts);
+  formNameHandler = (data = this.state.contacts) => {
+    return data;
   };
   render() {
-    const name = this.state.contacts;
     return (
       <>
-        <h2>Phonebook</h2>
-        <form onSubmit={this.onSubmit}>
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.onInputChange}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-          <button type="submit">Add contact</button>
-        </form>
-        <h2>Contacts</h2>
-        <div>
-          {name.map(({ name, id }) => {
-            return <li key={id}>{name}</li>;
-          })}
-        </div>
+        <Form onSubmit={this.formSubmitHandler} onName={this.formNameHandler} />
+        <Contacts name={this.formNameHandler()} />
       </>
     );
   }
